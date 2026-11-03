@@ -11,6 +11,9 @@
 .btn.amber{background:var(--amber);color:var(--ink)}
 .btn.amber:hover{background:var(--cream)}
 .plain{font-weight:600}
+.hero p.ca{font-size:14px;margin:30px 0 0;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.ca b{color:var(--amber)}
+.ca a{font-size:12.5px;overflow-wrap:anywhere;opacity:.85}
 .sleeper{position:absolute;right:clamp(-60px,2vw,40px);bottom:-46px;width:clamp(200px,27vw,380px);height:auto;border-radius:0}
 .clock{position:sticky;top:0;z-index:2;background:var(--ink);color:var(--cream);display:flex;gap:16px;align-items:center;padding:9px clamp(16px,4vw,48px)}
 .clock .mono{font-size:14px;color:var(--amber);min-width:6.4em}
