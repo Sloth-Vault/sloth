@@ -8,6 +8,7 @@ SLOTH is a savings vault on Solana. Every withdrawal needs two of three keys and
 - App: https://slothvault.xyz/app/
 - Docs: https://slothvault.xyz/docs/
 - X: https://x.com/slothvault_sol
+- $SLOTH: `5kNYZ3mzf7ZYWi2BfbDTmaaRt7CyEfjsyjZT3j8rpump` (not needed to use a vault)
 ## How it works
 
 A vault is a [Squads v4](https://github.com/Squads-Protocol/v4) multisig (`SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf`):
