@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SLOTH: the slowest wallet on Solana</title>
+<meta name="description" content="A Solana savings vault where nothing leaves at once. Every withdrawal needs a second key and waits 24 hours. Built on Squads v4.">
+<meta property="og:title" content="SLOTH: the slowest wallet on Solana">
+<meta property="og:description" content="The fastest chain. The slowest wallet.">
+<meta property="og:image" content="/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/logo.png">
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/landing.css">
+</head><body>
+<header class="top">
+  <a class="brand" href="#top"><img src="/logo.png" alt="" width="34" height="34"><span>SLOTH</span></a>
+  <nav><a href="#wait">The wait</a><a href="#limits">Limits</a><a href="#next">Next</a><a href="/docs/">Docs</a><a class="btn small" href="/app/">Open vault</a></nav>
+</header>
+
+<section class="hero" id="top">
+  <h1>The fastest chain.<br>The slowest wallet.</h1>
+  <p>On Solana a stolen key empties a wallet in under a second. SLOTH keeps your savings in a vault where nothing leaves at once.</p>
+  <div class="cta"><a class="btn amber" href="/app/">Open vault</a><a class="plain" href="#wait">Watch one withdrawal</a></div>
+  <img class="sleeper" src="/avatar.png" alt="SLOTH mascot, a sleepy sloth face" width="280" height="280">
+</section>
+
+<div class="clock" aria-hidden="true"><span class="mono" id="clock">00:00:00</span><i><b id="crawl"></b></i></div>
+
+<main id="wait">
+  <p class="lead">Scroll down. This is one withdrawal, start to finish, with the 24-hour wait running.</p>
+
+  <article><time class="mono">00:00</time>
+    <div><h2>A key asks to move everything.</h2>
+    <p>Maybe it's you. Maybe it's someone who got your seed phrase through a fake mint page. The vault can't tell, so it treats both the same way: it writes the request on-chain and moves nothing.</p></div>
+  </article>
+
+  <article><time class="mono">00:00</time>
+    <div><h2>One key is never enough.</h2>
+    <p>The vault has three keys: your main wallet, a backup on another device, and a guardian you choose. Any move needs two of them. A thief with one key has a request nobody will sign.</p>
+    <dl class="keys">
+      <div><dt>Main</dt><dd>Asks, approves, cancels, releases</dd></div>
+      <div><dt>Backup</dt><dd>Asks, approves, cancels, releases</dd></div>
+      <div><dt>Guardian</dt><dd>Approves or cancels. Can't ask, can't release</dd></div>
+    </dl></div>
+  </article>
+
+  <article><time class="mono">00:04</time>
+    <div><h2>The second key says yes. The clock starts.</h2>
+    <p>Both keys see the same thing, read from the chain: the amount, and the address it goes to. If the site can't read a request as a plain transfer, it tells you not to approve.</p></div>
+  </article>
+
+  <article class="dark"><time class="mono">12:00</time>
+    <div><h2>Now nothing can hurry it.</h2>
+    <p>The wait lives in the Squads program, so no site, team or signer can skip it. Two keys together can cancel at any point before release. Pick 24 hours, 3 days or 7 days when you create the vault.</p></div>
+  </article>
+
+  <article><time class="mono">23:59</time>
+    <div><h2>Lost a key? Swap it.</h2>
+    <p>The other two keys replace it. The swap waits out the same clock, and it voids every request still waiting for votes, so a thief's open request dies with the old key.</p></div>
+  </article>
+
+  <article class="done"><time class="mono">24:00</time>
+    <div><h2>Released.</h2>
+    <p>Main or backup sends the final transaction and the funds arrive at the address both keys agreed on. For money you spend every day, use a normal wallet. SLOTH is for the part you can't afford to lose.</p>
+    <a class="btn" href="/app/">Create a vault</a></div>
+  </article>
+</main>
+
+<section class="limits" id="limits">
+  <h2>What it doesn't do.</h2>
+  <div class="grid">
+    <div><h3>Two stolen keys beat it.</h3><p>Two keys can approve a move. After that, your remaining key can't cancel alone, because cancelling also takes two. Keep the three keys on separate devices, and pick a guardian you trust.</p></div>
+    <div><h3>Your guardian holds real power.</h3><p>A guardian can't start a move, but it can be the second vote on a thief's request. It can also refuse to vote when you need it.</p></div>
+    <div><h3>It isn't private.</h3><p>The vault and everything it does are public on Solana, like any wallet.</p></div>
+    <div><h3>It's slow on purpose.</h3><p>There's no emergency exit and no fast lane. If you need the money today, it's the wrong place for it.</p></div>
+    <div><h3>You're trusting Squads.</h3><p>Funds sit in a Squads v4 multisig. SLOTH holds no key and runs no contract of its own, and it isn't an audited product. Start small.</p></div>
+    <div><h3>This site can go away.</h3><p>Your vault won't. Any Squads v4 tool can open it with your keys.</p></div>
+  </div>
+</section>
+
+<section class="next" id="next">
+  <h2>Next, slowly.</h2>
+  <ol>
+    <li><b>Vault</b><span>Live now</span></li>
+    <li><b>Exposure</b><span>See what your wallet gives away</span></li>
+    <li><b>Taste</b><span>Check a transaction before you sign</span></li>
+    <li><b>Watch</b><span>Get told when your vault gets a request</span></li>
+    <li><b>Own program</b><span>One guardian cancels alone, plus a freeze</span></li>
+  </ol>
+</section>
+
+<footer><span class="mono">No trackers. No analytics. Fonts are served from here.</span><span class="links"><a href="/docs/">Docs</a><a href="https://github.com/Sloth-Vault/sloth">Source</a></span></footer>
+<script src="/landing.js" defer></script>
+</body></html>

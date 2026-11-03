@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SLOTH docs</title>
+<meta name="description" content="How a SLOTH vault works: three keys, two signatures, a public wait. Create, deposit, withdraw, cancel, replace a key, and open your vault without this site.">
+<meta property="og:title" content="SLOTH docs">
+<meta property="og:description" content="Three keys, two signatures, one public wait.">
+<meta property="og:image" content="/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/logo.png">
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/docs/docs.css">
+</head><body>
+<header class="bar">
+  <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30"><span>SLOTH</span><em>docs</em></a>
+  <nav><a href="https://github.com/Sloth-Vault/sloth">GitHub</a><a class="btn small" href="/app/">Open vault</a></nav>
+</header>
+
+<div class="layout">
+<aside>
+  <nav class="toc" aria-label="Contents">
+    <a href="#overview">Overview</a>
+    <a href="#keys">The three keys</a>
+    <a href="#create">Create a vault</a>
+    <a href="#deposit">Deposit</a>
+    <a href="#withdraw">Withdraw</a>
+    <a href="#cancel">Cancel or reject</a>
+    <a href="#replace">Replace a key</a>
+    <a href="#costs">Costs</a>
+    <a href="#without">Without this site</a>
+    <a href="#limits">Limits</a>
+    <a href="#tech">Under the hood</a>
+    <a href="#token">$SLOTH</a>
+    <a href="#faq">Questions</a>
+  </nav>
+</aside>
+
+<main>
+<section id="overview">
+  <h1>How a slow vault works.</h1>
+  <p class="lead">A SLOTH vault is a Squads v4 multisig on Solana with three keys. Any move needs two of them, then waits 24 hours, 3 days or 7 days on-chain before anyone can release it.</p>
+  <p>The point is time. A stolen key on Solana usually means an empty wallet within a second. In a SLOTH vault, a stolen key can only write a request, and that request needs a second signature and a full wait before a single lamport moves.</p>
+  <p>SLOTH holds no key and runs no contract of its own. This site builds transactions, your wallet signs them, and the Squads program enforces every rule below.</p>
+</section>
+
+<section id="keys">
+  <h2>The three keys</h2>
+  <table>
+    <thead><tr><th>Key</th><th>Ask</th><th>Approve</th><th>Cancel</th><th>Release</th></tr></thead>
+    <tbody>
+      <tr><td>Main</td><td>yes</td><td>yes</td><td>yes</td><td>yes</td></tr>
+      <tr><td>Backup</td><td>yes</td><td>yes</td><td>yes</td><td>yes</td></tr>
+      <tr><td>Guardian</td><td>no</td><td>yes</td><td>yes</td><td>no</td></tr>
+    </tbody>
+  </table>
+  <p>The threshold is 2 for everything: approving, rejecting and cancelling. A request created by one key already counts that key's approval, so it needs one more.</p>
+  <p class="note">The chain stores keys sorted by address, not by name, so the app shows <b>Full key</b> for main and backup and <b>Guardian</b> for the vote-only key.</p>
+  <h3>Choosing them</h3>
+  <ul>
+    <li><b>Main:</b> the wallet you use most. It becomes the creator of the vault.</li>
+    <li><b>Backup:</b> a separate wallet on another device, ideally a hardware wallet or a phone you don't browse with.</li>
+    <li><b>Guardian:</b> someone who answers messages, or a third wallet of your own kept offline. A guardian can't start a move, but it can be the second vote on one.</li>
+  </ul>
+  <p>Never reuse a seed phrase across keys. Three wallets from one seed are one key.</p>
+</section>
+
+<section id="create">
+  <h2>Create a vault</h2>
+  <ol class="steps">
+    <li>Open <a href="/app/">the app</a> and connect the main wallet (Phantom or any wallet that injects a Solana provider).</li>
+    <li>Paste the backup and guardian addresses.</li>
+    <li>Pick the wait: 24 hours, 3 days or 7 days.</li>
+    <li>Tick the box and press <b>Create vault</b>. One transaction, signed by the main wallet.</li>
+    <li>Copy the share link under <b>Share with your other keys</b> and open it on the backup and guardian wallets.</li>
+  </ol>
+  <p>Creation costs only network rent and fees, about 0.01 SOL to be safe. Squads charges no creation fee. The settings are fixed with no admin: there is no config authority, so only the keys themselves can change the vault, through the same two-key and wait rules.</p>
+</section>
+
+<section id="deposit">
+  <h2>Deposit</h2>
+  <p>The vault has two addresses. The <b>vault address</b> holds funds. The <b>multisig address</b> holds the rules and appears in your share link. Send funds only to the vault address shown under <b>Deposit</b>.</p>
+  <ul>
+    <li><b>SOL:</b> use the Deposit form or send from any wallet.</li>
+    <li><b>Tokens:</b> a normal transfer to the vault address. SPL and Token-2022 tokens both work, and the vault shows every token account it owns.</li>
+  </ul>
+  <p>Anyone can deposit. Only two keys and the wait can take it out.</p>
+</section>
+
+<section id="withdraw">
+  <h2>Withdraw</h2>
+  <div class="timeline">
+    <div><span class="mono">ask</span><p>A full key fills <b>New request</b>: asset, destination, amount. The request and its first approval land on-chain together.</p></div>
+    <div><span class="mono">approve</span><p>A second key opens the vault and reads the same request from the chain: amount and destination. It presses <b>Approve</b>. The clock starts now.</p></div>
+    <div><span class="mono">wait</span><p>The request shows <b>Waiting</b> with a countdown. Nothing can shorten it. Two keys can still cancel.</p></div>
+    <div><span class="mono">release</span><p>After the wait, main or backup presses <b>Release</b>. Funds go to the address both keys approved.</p></div>
+  </div>
+  <p>If the app can't read a request as a plain SOL or token transfer, it says so and hides Approve. Requests made by other tools may hold anything, so don't approve what you can't read.</p>
+  <p class="note">For tokens, the destination is the owner's wallet. The app creates their token account if it's missing, and reads the owner back when it shows the request.</p>
+</section>
+
+<section id="cancel">
+  <h2>Cancel or reject</h2>
+  <p><b>Reject</b> is a no vote on a request still waiting for its second key. Two rejects close it.</p>
+  <p><b>Cancel</b> stops a request that is already approved and waiting. It also takes two keys. One cancel is shown as <b>1 of 2 cancels</b> and the request stays live.</p>
+  <p>If a request you didn't make appears, assume one key is stolen. Cancel it with your two other keys, then replace the stolen one.</p>
+</section>
+
+<section id="replace">
+  <h2>Replace a key</h2>
+  <p>Under <b>Keys</b>, a full key presses <b>Replace</b> next to the lost key and enters the new address. That creates a key-change request, which follows the same path: a second key approves, the wait runs, then a full key releases it.</p>
+  <p>When it lands, every request still waiting for votes becomes void, including one a thief opened with the old key. A request that was already <b>approved</b> before the change can still be released, so cancel those with two keys.</p>
+  <p>The new key keeps the old key's role: a replaced guardian stays vote-only, a replaced full key stays full.</p>
+</section>
+
+<section id="costs">
+  <h2>Costs</h2>
+  <table>
+    <tbody>
+      <tr><td>Using SLOTH</td><td>Free. No token needed, no fee to us.</td></tr>
+      <tr><td>Creating a vault</td><td>Network rent and fees</td></tr>
+      <tr><td>A new request</td><td>About 0.004 SOL rent, paid by the key that asks</td></tr>
+      <tr><td>Approve, reject, cancel</td><td>Network fee only</td></tr>
+    </tbody>
+  </table>
+  <p>Every key needs a little SOL to sign. Keep some on the guardian, or it won't be able to vote when you need it.</p>
+</section>
+
+<section id="without">
+  <h2>Without this site</h2>
+  <p>Your vault lives in the Squads v4 program, not on slothvault.xyz. If this site disappears, open the multisig address with any Squads v4 tool, or with the open-source <code>@sqds/multisig</code> SDK, and sign with the same keys. The rules stay the same everywhere.</p>
+  <p>Keep a note of your multisig address somewhere offline. It's the part after <code>#</code> in your share link.</p>
+</section>
+
+<section id="limits">
+  <h2>Limits</h2>
+  <ul>
+    <li><b>Two stolen keys beat it.</b> Two keys can approve a move, and the third key can't cancel alone.</li>
+    <li><b>Two lost keys lock it.</b> With one key left, nothing can leave or change. Funds stay stuck for good.</li>
+    <li><b>No fast lane.</b> There is no emergency exit and no way to skip the wait.</li>
+    <li><b>Not private.</b> The vault and every request are public on Solana.</li>
+    <li><b>Not audited.</b> Squads v4 has its own audits. The SLOTH site and code have none. Start with a small amount.</li>
+    <li><b>The site doesn't change the wait.</b> Choose it carefully when you create the vault.</li>
+  </ul>
+</section>
+
+<section id="tech">
+  <h2>Under the hood</h2>
+  <table>
+    <tbody>
+      <tr><td>Program</td><td><code>SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf</code> (Squads v4)</td></tr>
+      <tr><td>Threshold</td><td>2 of 3</td></tr>
+      <tr><td>Time lock</td><td>86,400 s, 259,200 s or 604,800 s</td></tr>
+      <tr><td>Permissions</td><td>main and backup: all; guardian: vote</td></tr>
+      <tr><td>Config authority</td><td>none</td></tr>
+      <tr><td>Rent collector</td><td>the vault itself, so closed request rent returns to it</td></tr>
+    </tbody>
+  </table>
+  <p>The app is a static page. Chain reads and your signed transactions pass through <code>/rpc</code>, a small proxy that allows only read and send methods and keeps our RPC key off the page. There are no trackers, analytics or third-party scripts.</p>
+  <p>Rules were checked on mainnet with a short wait: one key refused, release during the wait refused, guardian can't ask or release, one cancel isn't enough, two are, and a key change voids open requests.</p>
+  <p>Source: <a href="https://github.com/Sloth-Vault/sloth">github.com/Sloth-Vault/sloth</a>. Tests run with <code>node test.mjs</code> in <code>vault/</code>.</p>
+</section>
+
+<section id="token">
+  <h2>$SLOTH</h2>
+  <p>You don't need $SLOTH to use a vault, and you never will. Protection that depends on your token balance would be a bad idea.</p>
+  <p>Half of creator fees run the site and RPC. The other half funds our own program and its audit: one guardian able to cancel alone, plus a freeze.</p>
+  <p class="note">Another token already trades under the SLOTH ticker. It isn't ours. Our contract address is posted only on this site and our own account.</p>
+</section>
+
+<section id="faq">
+  <h2>Questions</h2>
+  <details><summary>Can SLOTH take my money?</summary><p>No. SLOTH isn't a key on your vault and has no admin rights over it.</p></details>
+  <details><summary>Can I use one wallet as two keys?</summary><p>The app refuses duplicate keys. Two wallets from the same seed phrase pass, but they protect nothing.</p></details>
+  <details><summary>What if my guardian goes missing?</summary><p>Main and backup can still do everything, including replacing the guardian.</p></details>
+  <details><summary>Can I change the wait later?</summary><p>Not from this site. Squads tools can, with two keys and the current wait.</p></details>
+  <details><summary>Does it work with Ledger?</summary><p>Any wallet that can sign Solana transactions through your browser wallet works as a key.</p></details>
+  <details><summary>Is this financial advice?</summary><p>No.</p></details>
+</section>
+</main>
+</div>
+
+<footer><span class="mono">No trackers. No analytics. Fonts are served from here.</span><a href="https://github.com/Sloth-Vault/sloth">Source</a></footer>
+</body></html>

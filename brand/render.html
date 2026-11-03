@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Martian+Mono:wght@500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:transparent}svg{display:block}</style></head>
+<body><div id="stage"></div>
+<script>
+// The sloth: wide cream head, long eye bands, amber lids, no mouth. Drawn on a 400x400 box.
+const T='#2f4a34',F='#ecdcb4',K='#17140f',A='#e8a33d';
+const HEAD=`<path d="M200 84C296 84 356 136 356 210C356 284 288 326 200 326C112 326 44 284 44 210C44 136 104 84 200 84Z" fill="${F}"/><path d="M60 268C74 214 112 158 158 158C182 158 184 186 170 208C150 240 112 262 60 268Z" fill="${K}"/><path d="M340 268C326 214 288 158 242 158C218 158 216 186 230 208C250 240 288 262 340 268Z" fill="${K}"/><path d="M124 204C136 192 150 190 162 198" stroke="${A}" stroke-width="11" stroke-linecap="round" fill="none"/><path d="M276 204C264 192 250 190 238 198" stroke="${A}" stroke-width="11" stroke-linecap="round" fill="none"/><ellipse cx="200" cy="244" rx="26" ry="17" fill="${K}"/>`;
+const h=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})">${HEAD}</g>`;
+const txt=(x,y,size,s,fam='Young Serif',col=F)=>`<text x="${x}" y="${y}" font-family="${fam}" font-size="${size}" fill="${col}">${s}</text>`;
+const svg={
+  avatar:`<svg width="1000" height="1000" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="${T}"/>${h(-30,-30,2.65)}</svg>`,
+  logo:`<svg width="200" height="200" viewBox="0 0 400 400"><rect width="400" height="400" fill="${T}"/>${h(-12,-12,1.06)}</svg>`,
+  header:`<svg width="1500" height="500" viewBox="0 0 1500 500"><rect width="1500" height="500" fill="${T}"/>${txt(90,215,92,'The fastest chain.')}${txt(90,325,92,'The slowest wallet.')}${h(1040,40,1.05)}</svg>`,
+  og:`<svg width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="${T}"/>${txt(60,230,84,'The fastest chain.')}${txt(60,330,84,'The slowest wallet.')}${txt(64,420,26,'savings that wait 24 hours on solana','Martian Mono',A)}${h(760,250,1)}</svg>`,
+}[location.hash.slice(1)||'avatar'];
+document.getElementById('stage').innerHTML=svg;
+</script></body></html>

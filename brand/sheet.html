@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#888}#s{display:flex;gap:24px;padding:24px;align-items:flex-end}svg{display:block}</style></head><body><div id="s"></div>
+<script>
+const T='#2f4a34',F='#ecdcb4',K='#17140f',A='#e8a33d';
+// A: level face, long eye bands falling outward
+const a=`<path d="M200 62C288 62 346 126 346 206C346 290 282 342 200 342C118 342 54 290 54 206C54 126 112 62 200 62Z" fill="${F}"/>
+<path d="M150 158C132 150 110 168 96 206C84 240 80 262 92 270C110 280 138 240 156 204C168 180 166 166 150 158Z" fill="${K}"/>
+<path d="M250 158C268 150 290 168 304 206C316 240 320 262 308 270C290 280 262 240 244 204C232 180 234 166 250 158Z" fill="${K}"/>
+<rect x="124" y="182" width="30" height="9" rx="4" fill="${A}"/><rect x="246" y="182" width="30" height="9" rx="4" fill="${A}"/>
+<path d="M176 226H224C224 248 212 258 200 258C188 258 176 248 176 226Z" fill="${K}"/>
+<path d="M172 288C190 298 210 298 228 288" stroke="${K}" stroke-width="10" stroke-linecap="round" fill="none"/>`;
+// B: flatter wide head, closed lid over a slit, no mouth
+const b=`<path d="M200 84C296 84 356 136 356 210C356 284 288 326 200 326C112 326 44 284 44 210C44 136 104 84 200 84Z" fill="${F}"/>
+<path d="M60 268C74 214 112 158 158 158C182 158 184 186 170 208C150 240 112 262 60 268Z" fill="${K}"/>
+<path d="M340 268C326 214 288 158 242 158C218 158 216 186 230 208C250 240 288 262 340 268Z" fill="${K}"/>
+<path d="M124 204C136 192 150 190 162 198" stroke="${A}" stroke-width="11" stroke-linecap="round" fill="none"/>
+<path d="M276 204C264 192 250 190 238 198" stroke="${A}" stroke-width="11" stroke-linecap="round" fill="none"/>
+<ellipse cx="200" cy="244" rx="26" ry="17" fill="${K}"/>`;
+// C: hanging upside down from a branch at the top edge
+const c=`<rect x="-10" y="46" width="420" height="30" fill="${K}"/>
+<path d="M112 76V150" stroke="${F}" stroke-width="44" stroke-linecap="round"/><path d="M288 76V150" stroke="${F}" stroke-width="44" stroke-linecap="round"/>
+<g transform="rotate(180 200 220) translate(0 -8)"><path d="M200 112C278 112 330 164 330 230C330 298 272 340 200 340C128 340 70 298 70 230C70 164 122 112 200 112Z" fill="${F}"/>
+<path d="M92 282C102 238 132 196 164 196C184 196 186 220 174 238C156 262 128 278 92 282Z" fill="${K}"/>
+<path d="M308 282C298 238 268 196 236 196C216 196 214 220 226 238C244 262 272 278 308 282Z" fill="${K}"/>
+<path d="M136 236C146 226 156 224 166 230" stroke="${A}" stroke-width="9" stroke-linecap="round" fill="none"/>
+<path d="M264 236C254 226 244 224 234 230" stroke="${A}" stroke-width="9" stroke-linecap="round" fill="none"/>
+<ellipse cx="200" cy="270" rx="20" ry="13" fill="${K}"/></g>`;
+const tile=(g,s)=>`<svg width="${s}" height="${s}" viewBox="0 0 400 400"><rect width="400" height="400" fill="${T}"/>${g}</svg>`;
+document.getElementById('s').innerHTML=[a,b,c].map(g=>tile(g,360)+tile(g,48)).join('');
+</script></body></html>
