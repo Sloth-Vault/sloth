@@ -4,7 +4,7 @@
 .brand em{font:500 12px 'Martian Mono',monospace;font-style:normal;color:var(--amber);padding-top:4px}
 .bar nav{display:flex;gap:20px;align-items:center}
 .bar nav a:not(.btn){text-decoration:none;font-weight:500}
-.btn.small{padding:8px 14px;font-size:15px;background:var(--cream);color:var(--ink)}
+.btn.small{padding:8px 14px;font-size:15px;white-space:nowrap;background:var(--cream);color:var(--ink)}
 .layout{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:210px minmax(0,1fr);gap:56px;padding:0 clamp(16px,4vw,48px)}
 .toc{position:sticky;top:76px;display:flex;flex-direction:column;padding:48px 0 30px;border-right:1.5px solid var(--line)}
 .toc a{text-decoration:none;color:var(--mute);padding:5px 14px 5px 0;font-size:15px}
